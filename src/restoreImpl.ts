@@ -12,7 +12,10 @@ import * as utils from "./utils/actionUtils";
 export async function restoreImpl(
     stateProvider: IStateProvider
 ): Promise<string | undefined> {
-    core.setOutput(Outputs.SaveAlways, core.getInput(Inputs.SaveAlways));
+    core.setOutput(
+        Outputs.SaveAlways,
+        core.getInput(Inputs.SaveAlways) || "false"
+    );
 
     try {
         if (!utils.isCacheFeatureAvailable()) {
