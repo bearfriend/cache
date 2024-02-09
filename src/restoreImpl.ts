@@ -12,6 +12,8 @@ import * as utils from "./utils/actionUtils";
 export async function restoreImpl(
     stateProvider: IStateProvider
 ): Promise<string | undefined> {
+    core.setOutput(Outputs.SaveAlways, core.getInput(Inputs.SaveAlways));
+
     try {
         if (!utils.isCacheFeatureAvailable()) {
             core.setOutput(Outputs.CacheHit, "false");
