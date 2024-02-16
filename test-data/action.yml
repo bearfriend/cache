@@ -1,0 +1,14 @@
+name: cache-test-data
+description: Share test result data between run attempts
+
+runs:
+    using: composite
+    steps:
+        - name: Cache Test Data
+          uses: bearfriend/cache@save-always-output-build
+          id: d2l-test-data
+          with:
+              path: .d2l-test
+              save-always: true
+              key: d2l-test-${{ github.run_id }}-${{ github.run_attempt }}
+              restore-keys: d2l-test-${{ github.run_id }}-
