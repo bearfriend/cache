@@ -84,7 +84,11 @@ jobs:
 
   # End to end with save-always
   test-save-always:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -92,7 +96,7 @@ jobs:
         id: save-always
         uses: ./
         with:
-          key: test-${{ runner.os }}-${{ github.run_id }}
+          key: test-${{ runner.os }}-${{ github.run_id }}.${{ github.run_attempt }}
           path: test-cache
           save-always: true
       - name: Generate files
@@ -101,14 +105,18 @@ jobs:
           __tests__/create-cache-files.sh ${{ runner.os }}-save-always test-cache
           exit 1
   test-save-always-restore:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Restore cache
         uses: ./
         with:
-          key: test-${{ runner.os }}-${{ github.run_id }}
+          key: test-${{ runner.os }}-${{ github.run_id }}.${{ github.run_attempt }}
           path: test-cache
       - name: Verify cache
         run: __tests__/verify-cache-files.sh ${{ runner.os }}-save-always test-cache
