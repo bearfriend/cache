@@ -9,7 +9,7 @@ on:
     branches:
       - main
       - releases/**
-      - save-always-output-build
+      - save-always-output
 
 jobs:
   # Build and unit test
