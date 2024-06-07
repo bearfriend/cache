@@ -46,10 +46,10 @@ jobs:
       uses: actions/checkout@v3
     - name: Generate files in working directory
       shell: bash
-      run: __tests__/create-cache-files.sh ${{ runner.os }} test-cache
+      run: __tests__/create-cache-files.sh ${{ runner.os }}-save test-cache
     - name: Generate files outside working directory
       shell: bash
-      run: __tests__/create-cache-files.sh ${{ runner.os }} ~/test-cache
+      run: __tests__/create-cache-files.sh ${{ runner.os }}-save ~/test-cache
     - name: Save cache
       uses: ./
       with:
@@ -76,10 +76,41 @@ jobs:
           ~/test-cache
     - name: Verify cache files in working directory
       shell: bash
-      run: __tests__/verify-cache-files.sh ${{ runner.os }} test-cache
+      run: __tests__/verify-cache-files.sh ${{ runner.os }}-save test-cache
     - name: Verify cache files outside working directory
       shell: bash
-      run: __tests__/verify-cache-files.sh ${{ runner.os }} ~/test-cache
+      run: __tests__/verify-cache-files.sh ${{ runner.os }}-save ~/test-cache
+
+  # End to end with save-always
+  test-save-always:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Generate files
+        shell: bash
+        run: |
+          __tests__/create-cache-files.sh ${{ runner.os }}-save-always test-cache
+          exit 1
+      - name: Save cache
+        id: save-always
+        uses: ./
+        with:
+          key: test-${{ runner.os }}-${{ github.run_id }}
+          path: test-cache
+          save-always: true
+  test-save-always-restore:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Restore cache
+        uses: ./
+        with:
+          key: test-${{ runner.os }}-${{ github.run_id }}
+          path: test-cache
+      - name: Verify cache
+        run: __tests__/verify-cache-files.sh ${{ runner.os }}-save-always test-cache
 
   # End to end with proxy
   test-proxy-save:
