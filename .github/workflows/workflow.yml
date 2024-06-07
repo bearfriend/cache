@@ -88,11 +88,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Generate files
-        shell: bash
-        run: |
-          __tests__/create-cache-files.sh ${{ runner.os }}-save-always test-cache
-          exit 1
       - name: Save cache
         id: save-always
         uses: ./
@@ -100,6 +95,11 @@ jobs:
           key: test-${{ runner.os }}-${{ github.run_id }}
           path: test-cache
           save-always: true
+      - name: Generate files
+        shell: bash
+        run: |
+          __tests__/create-cache-files.sh ${{ runner.os }}-save-always test-cache
+          exit 1
   test-save-always-restore:
     runs-on: ubuntu-latest
     steps:
