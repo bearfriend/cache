@@ -115,7 +115,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Wait for cache
-        run: sleep 1
+        run: sleep 3
       - name: Restore cache
         uses: ./
         with:

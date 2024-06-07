@@ -29,7 +29,7 @@ inputs:
   save-always:
     description: 'Run the post step to save the cache even if another step before fails'
     default: 'false'
-    required: false    
+    required: false
 outputs:
   cache-hit:
     description: 'A boolean value to indicate an exact match was found for the primary key'
@@ -39,7 +39,7 @@ runs:
   using: 'node20'
   main: 'dist/restore/index.js'
   post: 'dist/save/index.js'
-  post-if: "success() || (contains(steps.*.outputs.save-always-d18d746b9, 'true') && !contains(steps.*.outputs.save-always-d18d746b9, 'false'))"
+  post-if: "(contains(steps.*.outputs.save-always-d18d746b9, 'true') && !contains(steps.*.outputs.save-always-d18d746b9, 'false'))"
 branding:
   icon: 'archive'
   color: 'gray-dark'
